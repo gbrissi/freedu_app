@@ -1,4 +1,4 @@
-
+import 'package:client/screens/post/provider/answer_view_controller.dart';
 import 'package:client/screens/post/provider/post_view_controller.dart';
 import 'package:client/shared/components/quill_text_field/quill_text_field.dart';
 import 'package:client/shared/extensions/quill_controller_get.dart';
@@ -12,7 +12,9 @@ import '../../../shared/http/models/api_result.dart';
 import '../../../shared/http/repositories/post_repository.dart';
 
 class PostAnswerBlock extends StatefulWidget {
-  const PostAnswerBlock({super.key});
+  const PostAnswerBlock({
+    super.key,
+  });
 
   @override
   State<PostAnswerBlock> createState() => _PostAnswerBlockState();
@@ -20,6 +22,7 @@ class PostAnswerBlock extends StatefulWidget {
 
 class _PostAnswerBlockState extends State<PostAnswerBlock> {
   late final postController = context.read<PostViewController>();
+  late final answerController = context.read<AnswerViewController>();
   final QuillController _controller = QuillController.basic();
   bool _isEnabled = true;
 
@@ -39,6 +42,10 @@ class _PostAnswerBlockState extends State<PostAnswerBlock> {
         context,
         SnackBarResult.fromApiResult(result),
       );
+
+      if (!result.isError) {
+        answerController.addAnswer(result.get());
+      }
     }
 
     isEnabled = true;

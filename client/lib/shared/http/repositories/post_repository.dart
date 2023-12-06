@@ -79,6 +79,7 @@ class PostRepository {
         "postId": postId,
       },
     ).then((response) {
+      print("RESPOSTA: ${response.body}");
       return ApiResult<AnswerModel>.fromResponse(
         response,
         (data) => AnswerModel.fromJson(data),

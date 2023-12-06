@@ -1,7 +1,9 @@
 import 'package:client/screens/post/components/answers_empty.dart';
 import 'package:client/screens/post/components/post_submissions/post_answer/post_answer.dart';
+import 'package:client/screens/post/provider/answer_view_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../helpers/paging_controller_manager.dart';
 import '../../../../shared/http/models/answer_model.dart';
@@ -23,12 +25,21 @@ class AnswersSection extends StatefulWidget {
 
 class _AnswersSectionState extends State<AnswersSection> {
   final int _limit = 10;
-  final PagingController<int, AnswerModel> _pagingController =
-      PagingController(firstPageKey: 0);
+  late final _answerController = context.read<AnswerViewController>();
+  final PagingController<int, AnswerModel> _pagingController = PagingController(
+    firstPageKey: 0,
+  );
 
   @override
   void initState() {
     super.initState();
+
+    _answerController.addListener(() {
+      _pagingController.itemList = [
+        ..._pagingController.itemList ?? [],
+        _answerController.answer!,
+      ];
+    });
 
     _pagingController.addPageRequestListener((pageKey) {
       PagingControllerManager.fetchItems<AnswerModel>(

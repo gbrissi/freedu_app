@@ -120,13 +120,13 @@ model Answer {
   id        Int             @id @default(autoincrement())
   content   String          @db.Text
   author    User            @relation(fields: [authorId], references: [id])
-  authorId  Int             @unique
+  authorId  Int             
   votes     AnswerVote[]
   reports   Report[]
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   post      Post            @relation(fields: [postId], references: [id])
-  postId    Int             @unique
+  postId    Int             
   comments  AnswerComment[]
 }
 

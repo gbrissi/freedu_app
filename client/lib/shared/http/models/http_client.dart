@@ -21,8 +21,8 @@ String? _nullableJsonEncode(Map<String, dynamic>? object) {
 
 class HttpClient {
   final http.Client client = http.Client();
-  static final String url =
-      Platform.isAndroid ? "192.168.1.111:3000" : "localhost:3000";
+  static const String url = "freedu-app-server.onrender.com";
+  // Platform.isAndroid ? "192.168.1.111:3000" : "localhost:3000";
   static final HttpClient instance = HttpClient();
 
   Map<String, String> _getHeaders(String? token) {
@@ -101,7 +101,7 @@ class HttpClient {
     String? customToken,
     Map<String, String?>? queryParams,
   }) async {
-    final Uri uri = Uri.http(url, path, queryParams);
+    final Uri uri = Uri.https(url, path, queryParams);
     final Map<String, String> headers = await _getHttpHeaders(
       sendAuthToken: sendAuthToken,
       customToken: customToken,
