@@ -1,4 +1,6 @@
+import 'package:client/shared/extensions/quill_controller_get.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class PostRegister {
   final List<String>? tags;
@@ -27,10 +29,10 @@ class PostCreateProvider extends ChangeNotifier {
 
   final void Function(PostRegister post) onSubmit;
   final TextEditingController subjectController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+  final QuillController contentController = QuillController.basic();
 
   String get subject => subjectController.text;
-  String get content => contentController.text;
+  String get content => contentController.get();
 
   PostCreateProvider({
     required this.onSubmit,

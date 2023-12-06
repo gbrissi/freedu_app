@@ -20,8 +20,14 @@ class VoteModel {
 
   VoteModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        author = AuthorModel.fromJson(json['author']),
+        author = _getAuthor(json),
         value = json['value'],
         createdAt = DateTime.parse(json['createdAt']),
         updatedAt = DateTime.parse(json['updatedAt']);
+}
+
+AuthorModel _getAuthor(Map<String, dynamic> json) {
+  print("JSON: $json");
+
+  return AuthorModel.fromJson(json['author']);
 }

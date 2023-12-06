@@ -268,7 +268,6 @@ class _QuillTextFieldState extends State<QuillTextField> {
               ),
             ],
           ),
-          // TODO: Create a class attributes as "showCustomButtonOnText" to enable such functionality in customButton class.
           Positioned(
             top: 8,
             right: 8,
@@ -283,7 +282,7 @@ class _QuillTextFieldState extends State<QuillTextField> {
                           child: InkWell(
                             onTap: widget.customButton?.onTap,
                             child: Padding(
-                              padding: const EdgeInsets.all(4),
+                              padding: const EdgeInsets.all(8),
                               child: Icon(
                                 widget.customButton?.icon,
                                 color: Theme.of(context)

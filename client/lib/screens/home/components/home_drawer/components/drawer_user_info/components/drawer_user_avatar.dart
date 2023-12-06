@@ -7,9 +7,10 @@ class DrawerUserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Add user image.
     return Avatar(
       radius: 60,
-      url: getRandomImageUrl(),
+      url: null,
     );
   }
 }

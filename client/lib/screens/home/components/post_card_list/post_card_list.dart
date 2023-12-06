@@ -1,17 +1,12 @@
-import 'dart:math';
-
-import 'package:client/extensions/contains_extension.dart';
+import 'package:client/helpers/paging_controller_manager.dart';
 import 'package:client/screens/home/components/post_card_list/components/post_card/post_card.dart';
 import 'package:client/screens/home/provider/posts_filter_provider.dart';
-import 'package:client/shared/http/models/http_status/implementations/http_success.dart';
 import 'package:client/shared/http/models/page_options.dart';
 import 'package:client/shared/http/models/post_card_model.dart';
 import 'package:client/shared/http/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../shared/http/models/api_result.dart';
 
 class PostCardList extends StatefulWidget {
   const PostCardList({super.key});
@@ -22,45 +17,37 @@ class PostCardList extends StatefulWidget {
 
 class _PostCardListState extends State<PostCardList> {
   late final controller = context.read<PostsFilterProvider>();
-  late String query = controller.query;
   final int _limit = 10;
 
   final PagingController<int, PostCardModel> _pagingController =
       PagingController(firstPageKey: 0);
 
-  void _fetchPage(int pageKey) async {
-      final ApiResult<List<PostCardModel>> result =
-          await PostRepository.getCardsPaginated(
-        pageOptions: PageOptions(limit: 3, page: pageKey),
-      );
-
-      if (result.isError) throw Error();
-      final List<PostCardModel> items =
-          (result.result as HttpSuccess<List<PostCardModel>>).data;
-
-      final bool isLastPage = items.length < _limit;
-
-      if (isLastPage) {
-        _pagingController.appendLastPage(items);
-      } else {
-        final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(items, nextPageKey);
-      }
-  }
-
   @override
   void initState() {
     _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
+      PagingControllerManager.fetchItems<PostCardModel>(
+        limit: _limit,
+        onError: (error) => _pagingController.error = error,
+        future: PostRepository.getCardsPaginated(
+          pageOptions: PageOptions(
+            limit: _limit,
+            page: pageKey,
+            tags: controller.tags,
+            dateRange: controller.dateRange,
+            search: controller.query,
+          ),
+        ),
+        callback: (result) {
+          if (result.isLastPage) {
+            _pagingController.appendLastPage(result.items);
+          } else {
+            _pagingController.appendPage(result.items, pageKey + 1);
+          }
+        },
+      );
     });
 
-    controller.addListener(() {
-      if (controller.query != query && mounted) {
-        setState(() {
-          query = controller.query;
-        });
-      }
-    });
+    controller.addListener(_pagingController.refresh);
 
     super.initState();
   }

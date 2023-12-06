@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../../../../shared/components/quill_data_text.dart';
+
 class PostViewContent extends StatelessWidget {
   const PostViewContent({
     super.key,
-    required this.text,
+    required this.content,
+    required this.isLoading,
   });
-  final String text;
+  final String? content;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-      ),
+    return QuillDataText.content(
+      content,
+      isLoading: isLoading,
     );
   }
 }

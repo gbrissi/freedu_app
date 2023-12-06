@@ -14,7 +14,7 @@ class _CreatePostButtonState extends State<CreatePostButton> {
   late final controller = context.read<PostCreateProvider>();
   bool get isSyncing => controller.isSyncing;
 
-  void Function()? get submit => isSyncing ? controller.submit : null;
+  void Function()? get submit => !isSyncing ? controller.submit : null;
   void Function()? get callback => !isSyncing ? showConfirmDialog : null;
 
   void showConfirmDialog() {
@@ -34,9 +34,7 @@ class _CreatePostButtonState extends State<CreatePostButton> {
                   submit!();
                 }
 
-                // TODO: Await for result and decide whether to stay on the page
-                // or be redirected to the publication.
-                // context.pop();
+                context.pop();
               },
               child: const Text("Sim"),
             )

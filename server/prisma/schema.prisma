@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Option {
+enum ReportOption {
   MISINFORMATION
   VIOLENT_CONTENT
   INAPPROPRIATE_NAME
@@ -15,32 +15,32 @@ enum Option {
 }
 
 model Post {
-  id            Int          @id @default(autoincrement())
-  author        User         @relation(fields: [authorId], references: [id])
-  authorId      Int          @unique
-  tags          Tag[]
-  answers       Answer[]
-  votes         Vote[]
-  reports       Report[]
-  subject       String       @db.VarChar(255)
-  content       String?      @db.Text
-  published     Boolean      @default(true)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  answerComment PostComment?
+  id        Int           @id @default(autoincrement())
+  author    User          @relation(fields: [authorId], references: [id])
+  authorId  Int
+  tags      Tag[]
+  answers   Answer[]
+  comments  PostComment[]
+  votes     PostVote[]
+  reports   Report[]
+  subject   String        @db.VarChar(255)
+  content   String?       @db.Text
+  published Boolean       @default(true)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 }
 
 model PostComment {
-  id        Int      @id @default(autoincrement())
-  content   String   @db.Text
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int      @unique
-  votes     Vote[]
+  id        Int               @id @default(autoincrement())
+  content   String            @db.Text
+  author    User              @relation(fields: [authorId], references: [id])
+  authorId  Int
+  post      Post              @relation(fields: [postId], references: [id])
+  postId    Int
+  votes     PostCommentVote[]
   reports   Report[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  post      Post     @relation(fields: [postId], references: [id])
-  postId    Int      @unique
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
 
 model Tag {
@@ -51,54 +51,81 @@ model Tag {
   updatedAt DateTime @updatedAt
 }
 
-model Vote {
+model PostCommentVote {
+  id            Int          @id @default(autoincrement())
+  value         Int
+  author        User         @relation(fields: [authorId], references: [id])
+  authorId      Int          @unique
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  postComment   PostComment? @relation(fields: [postCommentId], references: [id])
+  postCommentId Int
+}
+
+model PostVote {
+  id        Int      @id @default(autoincrement())
+  value     Int
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post      Post?    @relation(fields: [postId], references: [id])
+  postId    Int?
+}
+
+model AnswerCommentVote {
   id              Int            @id @default(autoincrement())
   value           Int
   author          User           @relation(fields: [authorId], references: [id])
   authorId        Int            @unique
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
-  post            Post?          @relation(fields: [postId], references: [id])
-  postId          Int?
-  answer          Answer?        @relation(fields: [answerId], references: [id])
-  answerId        Int?
   answerComment   AnswerComment? @relation(fields: [answerCommentId], references: [id])
   answerCommentId Int?
-  postComment     PostComment?   @relation(fields: [postCommentId], references: [id])
-  postCommentId   Int?
+}
+
+model AnswerVote {
+  id        Int      @id @default(autoincrement())
+  value     Int
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  answer    Answer?  @relation(fields: [answerId], references: [id])
+  answerId  Int?
 }
 
 model Answer {
-  id            Int            @id @default(autoincrement())
-  content       String         @db.Text
-  author        User           @relation(fields: [authorId], references: [id])
-  authorId      Int            @unique
-  votes         Vote[]
-  reports       Report[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  post          Post           @relation(fields: [postId], references: [id])
-  postId        Int            @unique
-  answerComment AnswerComment?
+  id        Int             @id @default(autoincrement())
+  content   String          @db.Text
+  author    User            @relation(fields: [authorId], references: [id])
+  authorId  Int             @unique
+  votes     AnswerVote[]
+  reports   Report[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  post      Post            @relation(fields: [postId], references: [id])
+  postId    Int             @unique
+  comments  AnswerComment[]
 }
 
 model AnswerComment {
-  id        Int      @id @default(autoincrement())
-  content   String   @db.Text
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int      @unique
-  votes     Vote[]
+  id        Int                 @id @default(autoincrement())
+  content   String              @db.Text
+  author    User                @relation(fields: [authorId], references: [id])
+  authorId  Int                 @unique
+  votes     AnswerCommentVote[]
   reports   Report[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  answer    Answer   @relation(fields: [answerId], references: [id])
-  answerId  Int      @unique
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  answer    Answer              @relation(fields: [answerId], references: [id])
+  answerId  Int                 @unique
 }
 
 // TODO: Change this shit.
 model Report {
   id              Int            @id @default(autoincrement())
-  option          Option
+  option          ReportOption
   reason          String         @db.VarChar(255)
   author          User           @relation(fields: [authorId], references: [id])
   authorId        Int            @unique
@@ -114,47 +141,42 @@ model Report {
   postCommentId   Int?
 }
 
-model PictureReferences {
+model Picture {
   id        Int      @id @default(autoincrement())
-  small     String   @db.VarChar(255)
-  thumbnail String   @db.VarChar(255)
+  name      String   @db.VarChar(255)
+  filetype  String   @db.VarChar(255)
+  small     String?  @db.VarChar(255)
+  thumbnail String?  @db.VarChar(255)
   original  String   @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  picture   Picture?
-}
-
-model Picture {
-  id        Int               @id @default(autoincrement())
-  name      String            @db.VarChar(255)
-  filetype  String            @db.VarChar(255)
-  urls      PictureReferences @relation(fields: [urlsId], references: [id])
-  urlsId    Int               @unique
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
   user      User?
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  username      String         @unique @db.VarChar(255)
-  password      String
-  picture       Picture?       @relation(fields: [pictureId], references: [id])
-  pictureId     Int?           @unique
-  name          String         @db.VarChar(255)
-  email         String?        @db.VarChar(255)
+  id                 Int                 @id @default(autoincrement())
+  username           String              @unique @db.VarChar(255)
+  password           String
+  picture            Picture?            @relation(fields: [pictureId], references: [id])
+  pictureId          Int?                @unique
+  name               String              @db.VarChar(255)
+  email              String?             @db.VarChar(255)
   // devices       Device[]
   // notifications Notification[]
-  description   String?        @db.Text
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  post          Post?
-  vote          Vote?
-  answer        Answer?
-  report        Report?
-  answerComment AnswerComment?
-  postComment   PostComment?
-  blocked       Blocked?
+  description        String?             @db.Text
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  posts              Post[]
+  answerVotes        AnswerVote[]
+  postVotes          PostVote[]
+  answerCommentVotes AnswerCommentVote[]
+  postCommentVotes   PostCommentVote[]
+
+  answers        Answer[]
+  reports        Report[]
+  answerComments AnswerComment[]
+  postComments   PostComment[]
+  blocked        Blocked?
 }
 
 model Blocked {

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:client/screens/home/components/post_card_list/components/post_card/provider/post_card_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:provider/provider.dart';
 
 class PostCardDescription extends StatefulWidget {
@@ -10,18 +13,30 @@ class PostCardDescription extends StatefulWidget {
 }
 
 class _PostCardDescriptionState extends State<PostCardDescription> {
-  late final controller = context.read<PostCardProvider>();
-  String get description => controller.post.content;
+  late final _controller = context.read<PostCardProvider>();
+  String get description => _controller.post.content;
+  final QuillController _quillController = QuillController.basic();
+
+  @override
+  void initState() {
+    super.initState();
+    if (description.trim().isNotEmpty) {
+      _quillController.document = Document.fromJson(jsonDecode(description));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      description,
-      overflow: TextOverflow.ellipsis,
-      maxLines: 3,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w300,
+    return IgnorePointer(
+      child: QuillEditor(
+        controller: _quillController,
+        readOnly: true,
+        autoFocus: false,
+        expands: false,
+        focusNode: FocusNode(),
+        scrollController: ScrollController(),
+        scrollable: false,
+        padding: EdgeInsets.zero,
       ),
     );
   }

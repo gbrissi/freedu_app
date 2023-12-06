@@ -1,4 +1,5 @@
 import 'package:client/shared/components/custom_app_bar/custom_app_bar.dart';
+import 'package:client/shared/components/page_title.dart';
 import 'package:flutter/material.dart';
 
 class Activity extends StatelessWidget {
@@ -12,6 +13,9 @@ class Activity extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
+        child: PageTitle(
+          text: "Nenhuma notificação encontrada",
+        ),
       ),
     );
   }

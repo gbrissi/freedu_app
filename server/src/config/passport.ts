@@ -4,6 +4,7 @@ import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import prisma from "./prismaClient";
 import crypto from "crypto";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request } from "express";
 
 // Passport strategies
@@ -56,7 +57,8 @@ passport.use(
     },
     function (accessToken, refreshToken, profile, cb) {
       console.log("profile: ", profile);
-      return cb(null, profile);
+      // TODO: 
+      // return cb(null, profile);
     }
   )
 );
@@ -66,19 +68,25 @@ passport.use(
     {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       // jwtFromRequest: (req: Request): string | null => {
-      //   console.log("Request: ", req.headers);
-      //   let jwt: string | null = null;
+      //   let token: string | null = null;
+
       //   if (req.headers.authorization != null) {
-      //     jwt = req.headers.authorization.split("Bearer ".toLowerCase())[1];
+      //     token = req.headers.authorization.split("Bearer ")[1];
       //   }
 
-      //   return jwt;
+      //   let jwtPayload: string | null = null;
+      //   if (token) {
+      //     jwtPayload = jwt.verify(token, process.env.JWT_SECRET_KEY!) as string;
+      //   }
+
+      //   console.log("Payload: ", jwtPayload);
+      //   return jwtPayload;
       // },
       secretOrKey: process.env.JWT_SECRET_KEY!,
     },
     function (jwtPayload, cb) {
       // TODO: Check if user is blocked?
-      console.log("ta aqui o payload: ", jwtPayload)
+      console.log("ta aqui o payload: ", jwtPayload);
       return prisma.user
         .findUnique({
           where: {

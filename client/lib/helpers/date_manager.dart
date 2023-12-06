@@ -1,4 +1,3 @@
-
 class DateManager {
   static String _getPreffix(String value) {
     if (value.length == 1) {
@@ -16,7 +15,11 @@ class DateManager {
   }
 
   static String stringify(DateTime value, {bool showHours = false}) {
-    String date = "${value.day}/${value.month}/${value.year}";
+    String formattedDay = _getPreffix(value.day.toString());
+    String formattedMonth = _getPreffix(value.month.toString());
+    String formattedYear = _getPreffix(value.year.toString());
+
+    String date = "$formattedDay/$formattedMonth/$formattedYear";
     String hours = _getHours(value);
 
     if (showHours) {

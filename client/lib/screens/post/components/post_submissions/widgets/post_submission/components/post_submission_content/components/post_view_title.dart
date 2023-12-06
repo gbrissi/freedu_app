@@ -1,20 +1,20 @@
+import 'package:client/shared/components/data_text.dart';
 import 'package:flutter/material.dart';
 
 class PostViewTitle extends StatelessWidget {
   const PostViewTitle({
     super.key,
     required this.title,
+    required this.isLoading,
   });
-  final String title;
+  final String? title;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return DataText.subject(
       title,
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-      ),
+      isLoading: isLoading,
     );
   }
 }

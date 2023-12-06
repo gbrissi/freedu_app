@@ -6,7 +6,7 @@ export interface JwtToken {
   refreshToken: string;
 }
 
-interface JwtReduced {
+export interface JwtReduced {
   id: number;
   username: string;
 }

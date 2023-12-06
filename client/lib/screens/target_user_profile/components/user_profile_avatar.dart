@@ -8,9 +8,10 @@ class UserProfileAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Add target picture.
     return Avatar(
       radius: 64,
-      url: getRandomImageUrl(),
+      url: null
     );
   }
 }

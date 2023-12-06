@@ -1,29 +1,30 @@
 import 'package:client/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Must add this line.
-  // await windowManager.ensureInitialized();
+  await windowManager.ensureInitialized();
 
-  // WindowOptions windowOptions = const WindowOptions(
-  //   minimumSize: Size(390, 780),
-  //   maximumSize: Size(390, 780),
-  //   center: true,
-  //   backgroundColor: Colors.transparent,
-  //   skipTaskbar: false,
-  //   titleBarStyle: TitleBarStyle.hidden,
-  // );
+  WindowOptions windowOptions = const WindowOptions(
+    minimumSize: Size(390, 780),
+    maximumSize: Size(390, 780),
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: false,
+    titleBarStyle: TitleBarStyle.hidden,
+  );
 
-  // windowManager.waitUntilReadyToShow(
-  //   windowOptions,
-  //   () async {
-  //     await windowManager.show();
-  //     await windowManager.focus();
-  //   },
-  // );
+  windowManager.waitUntilReadyToShow(
+    windowOptions,
+    () async {
+      await windowManager.show();
+      await windowManager.focus();
+    },
+  );
 
   initializeDateFormatting().then(
     (_) => runApp(

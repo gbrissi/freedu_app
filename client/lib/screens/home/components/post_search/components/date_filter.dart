@@ -20,10 +20,18 @@ class _DateFilterState extends State<DateFilter> {
   void _getDateRange() => context.pop(_dateRange);
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+
+  final Duration _dayLimit = const Duration(
+    hours: 23,
+    minutes: 59,
+    seconds: 59,
+  );
+
   late final DateRange _dateRange = DateRange(
     start: widget.value.start,
     end: widget.value.end,
   );
+
   final RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOn;
   CalendarFormat _calendarFormat = CalendarFormat.month;
 
@@ -37,11 +45,16 @@ class _DateFilterState extends State<DateFilter> {
     }
   }
 
-  void _onRangeSelected(start, end, focusedDay) {
+  void _onRangeSelected(DateTime? start, DateTime? end, focusedDay) {
     setState(() {
       _selectedDay = null;
       _focusedDay = focusedDay;
-      _dateRange.update(start, end);
+      _dateRange.update(
+        start,
+        end?.add(
+          _dayLimit,
+        ),
+      );
       // _rangeSelectionMode = RangeSelectionMode.toggledOn;
     });
   }

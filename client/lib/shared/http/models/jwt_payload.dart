@@ -5,7 +5,7 @@ class JwtPayload {
   final DateTime expiresIn;
 
   bool get isExpired =>
-      DateTime.now().millisecondsSinceEpoch < expiresIn.millisecondsSinceEpoch;
+      DateTime.now().millisecondsSinceEpoch > expiresIn.millisecondsSinceEpoch;
 
   JwtPayload.fromJson(Map<String, dynamic> json)
       : id = json['id'],

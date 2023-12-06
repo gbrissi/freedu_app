@@ -8,7 +8,7 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/morgan": "^1.9.7",
     "@types/node": "^20.8.6",
-    "@types/passport": "^1.0.14",
+    "@types/passport": "^1.0.16",
     "@types/passport-google-oauth20": "^2.0.14",
     "@types/passport-jwt": "^3.0.13",
     "@types/passport-local": "^1.0.38",
@@ -21,6 +21,7 @@
     "seed": "ts-node src/seed.ts"
   },
   "dependencies": {
+    "@google-cloud/storage": "^7.7.0",
     "@prisma/client": "^5.4.2",
     "@zxcvbn-ts/core": "^3.0.4",
     "@zxcvbn-ts/language-common": "^3.0.4",

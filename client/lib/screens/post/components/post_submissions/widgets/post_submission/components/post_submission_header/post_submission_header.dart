@@ -9,14 +9,17 @@ class PostSubmissionHeader extends StatelessWidget {
   const PostSubmissionHeader({
     super.key,
     required this.author,
-    required this.postCreatedAt,
+    required this.createdAt,
     this.postTags,
+    required this.voteInteractive,
     required this.authorImageUrl,
   });
   final String author;
-  final DateTime postCreatedAt;
+  final VoteInteractive voteInteractive;
+  final DateTime createdAt;
   final List<String>? postTags;
-  final String authorImageUrl;
+  final String? authorImageUrl;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -36,16 +39,14 @@ class PostSubmissionHeader extends StatelessWidget {
                   name: author,
                 ),
                 PostViewMeta(
-                  createdAt: postCreatedAt,
+                  createdAt: createdAt,
                   tags: postTags ?? [],
                 ),
               ],
             ),
           ),
         ),
-        const VoteInteractive(
-          vote: 1,
-        ),
+        voteInteractive,
       ],
     );
   }

@@ -1,5 +1,3 @@
-import 'author_model.dart';
-
 class BlockedModel {
   final int id;
   final DateTime expiresAt;

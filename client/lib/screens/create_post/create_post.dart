@@ -6,17 +6,31 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../shared/http/models/api_result.dart';
+import '../../shared/http/models/post_view_model.dart';
+import '../../utils/show_snackbar.dart';
 import 'components/create_post_app_bar.dart';
 import 'components/create_post_button.dart';
 import 'components/create_post_content.dart';
 import 'components/create_post_subject.dart';
 import 'components/create_post_tags_selector.dart';
 
-class CreatePost extends StatelessWidget {
+class CreatePost extends StatefulWidget {
   const CreatePost({super.key});
 
+  @override
+  State<CreatePost> createState() => _CreatePostState();
+}
+
+class _CreatePostState extends State<CreatePost> {
   void _onSubmit(PostRegister post) {
-    PostRepository.createPost(post).then((ApiResult<PostModel> post) => null);
+    PostRepository.createPost(post).then((ApiResult<PostViewModel> post) {
+      if (mounted) {
+        showSnackbar(
+          context,
+          SnackBarResult.fromApiResult(post),
+        );
+      }
+    });
   }
 
   @override

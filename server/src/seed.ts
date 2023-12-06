@@ -26,7 +26,8 @@ async function _seedDatabase() {
         where: { name: tag },
         update: { name: tag },
         create: { name: tag },
-      })
+      }).then((value) => console.info("Tag created: ", value))
+      .catch((err) => console.error(err));
   });
 }
 

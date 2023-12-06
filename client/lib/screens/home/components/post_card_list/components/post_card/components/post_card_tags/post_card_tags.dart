@@ -18,6 +18,8 @@ class _PostCardTagsState extends State<PostCardTags> {
   @override
   Widget build(BuildContext context) {
     return Wrap(
+      spacing: 4,
+      runSpacing: 4,
       children: tags
           .map<Widget>(
             (tag) => PostCardTag(

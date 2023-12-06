@@ -50,20 +50,16 @@ class HttpClient {
     late final String? token;
 
     if (customToken != null) {
-      print("enviando customToken");
       token = customToken;
     } else {
       token = sendAuthToken ? await _getAccessToken() : null;
     }
 
-    print('resultado token: $token');
     return _getHeaders(token);
   }
 
   JwtPayload _getPayload(String token) {
-    print("token q recolhi: $token");
     final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    print("decodedToken: $decodedToken");
     return JwtPayload.fromJson(decodedToken);
   }
 
@@ -71,17 +67,13 @@ class HttpClient {
     String? accessToken;
     final JwtToken? jwtToken = await SharedPrefsService.getJwtToken();
 
-    print("cheguei nessa QPORRAS: $jwtToken");
     if (jwtToken != null) {
-      print('entrei');
       final JwtPayload accessTokenPayload = _getPayload(jwtToken.accessToken);
       final JwtPayload refreshTokenPayload = _getPayload(jwtToken.refreshToken);
-      print("crashei");
 
       if (accessTokenPayload.isExpired && refreshTokenPayload.isExpired) {
         // TODO: Redirect to login if refresh token is expired and wait for new JwtToken callback.
       } else if (accessTokenPayload.isExpired) {
-        print("to selecionando token: ${jwtToken.refreshToken}");
         await AuthRepository.refreshAccessToken(
           refreshToken: jwtToken.refreshToken,
         ).then((value) async {
@@ -107,7 +99,7 @@ class HttpClient {
       Map<String, String> headers,
     ) httpCallback, {
     String? customToken,
-    Map<String, String>? queryParams,
+    Map<String, String?>? queryParams,
   }) async {
     final Uri uri = Uri.http(url, path, queryParams);
     final Map<String, String> headers = await _getHttpHeaders(
@@ -115,7 +107,6 @@ class HttpClient {
       customToken: customToken,
     );
 
-    print('headers: $headers');
     final http.Response response = await httpCallback(uri, headers);
     return response;
   }
@@ -141,7 +132,7 @@ class HttpClient {
 
   Future<http.Response> patch({
     required String path,
-    required Map<String, String> body,
+    required Map<String, String?> body,
     bool useAccessToken = false,
   }) =>
       _sendHttpReq(
@@ -171,7 +162,7 @@ class HttpClient {
 
   Future<http.Response> get({
     required String path,
-    Map<String, String>? query,
+    Map<String, String?>? query,
     bool useAccessToken = false,
   }) =>
       _sendHttpReq(

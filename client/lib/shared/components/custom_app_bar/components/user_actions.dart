@@ -29,7 +29,8 @@ class _UserActionsState extends State<UserActions> {
         ];
       },
       child: Avatar(
-        url: getRandomImageUrl(),
+        // TODO: Add user image url.
+        url: null,
       ),
     );
   }

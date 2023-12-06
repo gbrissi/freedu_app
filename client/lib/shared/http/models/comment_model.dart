@@ -1,10 +1,12 @@
+import 'package:client/shared/http/models/vote_model.dart';
+
 import 'author_model.dart';
 
 class CommentModel {
   final int id;
   final AuthorModel author;
   final String content;
-  final int votes;
+  final List<VoteModel>? votes;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -24,7 +26,9 @@ class CommentModel {
       : id = json['id'],
         author = AuthorModel.fromJson(json['author']),
         content = json['content'],
-        votes = json['votes'],
+        votes = json['votes']
+            ?.map<VoteModel>((e) => VoteModel.fromJson(e))
+            .toList(),
         createdAt = DateTime.parse(json['createdAt']),
         updatedAt = DateTime.parse(json['updatedAt']);
 }

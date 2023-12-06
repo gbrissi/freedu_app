@@ -17,6 +17,7 @@ import '../screens/home/components/post_search/models/date_range.dart';
 import '../screens/post/post.dart';
 import '../screens/auth/register/register.dart';
 import '../screens/settings/settings.dart';
+import '../screens/user_profile/controller/user_profile_controller.dart';
 import '../shared/providers/theme_provider.dart';
 
 Widget _renderTagsScreen(context, state) {
@@ -121,7 +122,10 @@ final GoRouter router = GoRouter(
                 GoRoute(
                   path: 'profile',
                   name: 'editProfile',
-                  builder: (context, state) => const UserProfile(),
+                  builder: (context, state) => ChangeNotifierProvider(
+                    create: (context) => UserProfileController(),
+                    child: const UserProfile(),
+                  ),
                 ),
               ],
             ),

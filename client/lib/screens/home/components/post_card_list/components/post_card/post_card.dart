@@ -28,6 +28,8 @@ class _PostCardState extends State<PostCard> {
         extra: widget.post.id,
       );
 
+  final BorderRadius borderRadius = BorderRadius.circular(12);
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -35,28 +37,37 @@ class _PostCardState extends State<PostCard> {
         post: widget.post,
       ),
       child: Card(
-        child: InkWell(
-          onTap: viewPost,
-          child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: ColumnSeparated(
-              spacing: 8,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                PostCardMeta(),
-                Column(
+        shape: RoundedRectangleBorder(
+          borderRadius: borderRadius,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: viewPost,
+              child: Padding(
+                padding: const EdgeInsets.all(4),
+                child: ColumnSeparated(
+                  spacing: 8,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    PostCardTitle(),
-                    PostCardDescription(),
+                  children: const [
+                    PostCardMeta(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PostCardTitle(),
+                        PostCardDescription(),
+                      ],
+                    ),
+                    PostCardTags(),
+                    Padding(
+                      padding: EdgeInsets.only(top: 12),
+                      child: PostCardAuthorMeta(),
+                    ),
                   ],
                 ),
-                PostCardTags(),
-                Padding(
-                  padding: EdgeInsets.only(top: 12),
-                  child: PostCardAuthorMeta(),
-                ),
-              ],
+              ),
             ),
           ),
         ),

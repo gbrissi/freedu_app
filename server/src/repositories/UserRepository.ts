@@ -1,6 +1,13 @@
 import prisma from "../config/prismaClient";
 import type { User, Picture } from "@prisma/client";
 import UserEssential from "../models/UserEssential";
+import {
+  UserProfileModel,
+  convertQueryToUserProfileModel,
+  userProfileModelQuery,
+} from "../interfaces/UserProfileModel";
+import { StoredPicture } from "../interfaces/StoredPicture";
+import { pictureModelQuery } from "../interfaces/PictureModel";
 
 interface UserPublicInfo {
   id: number;
@@ -22,6 +29,71 @@ export default class UserRepository {
           },
         })
         .then((user: User) => resolve(user))
+        .catch((err) => reject(err));
+    });
+  }
+
+  updateProfile({
+    userId,
+    name,
+    email,
+    description,
+    picture,
+  }: {
+    userId: number;
+    name: string;
+    email?: string;
+    description?: string;
+    picture?: StoredPicture;
+  }): Promise<UserProfileModel> {
+    const pictureQuery =
+      picture != null
+        ? {
+            picture: {
+              create: {
+                name: picture!.name,
+                original: picture!.url,
+                filetype: picture!.fileType,
+              },
+            },
+          }
+        : {};
+
+    return new Promise((resolve, reject) => {
+      prisma.user
+        .update({
+          where: {
+            id: userId,
+          },
+          data: {
+            name: name,
+            email: email,
+            description: description,
+            ...pictureQuery,
+          },
+          select: userProfileModelQuery,
+        })
+        .then((value) => {
+          if (!value) return reject("User not found");
+          else resolve(convertQueryToUserProfileModel(value));
+        })
+        .catch((err) => reject(err));
+    });
+  }
+
+  getProfile(userId: number): Promise<UserProfileModel> {
+    return new Promise((resolve, reject) => {
+      prisma.user
+        .findUnique({
+          where: {
+            id: userId,
+          },
+          select: userProfileModelQuery,
+        })
+        .then((value) => {
+          if (!value) reject("Profile not found");
+          else resolve(convertQueryToUserProfileModel(value));
+        })
         .catch((err) => reject(err));
     });
   }

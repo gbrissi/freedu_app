@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../shared/components/custom_app_bar/custom_app_bar.dart';
+import 'components/answers_section/answers_section.dart';
 import 'components/post_answer_block.dart';
-import 'components/post_answers_declaration.dart';
-import 'components/post_submissions/post_answer/post_answer.dart';
 
 class Post extends StatefulWidget {
   const Post({
@@ -25,7 +24,7 @@ class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => PostViewController(),
+      create: (_) => PostViewController(widget.postId),
       child: Scaffold(
         appBar: const CustomAppBar(
           showBackButton: true,
@@ -40,30 +39,19 @@ class _PostState extends State<Post> {
               ),
               child: CustomScrollView(
                 controller: controller,
-                slivers: const [
-                  SliverToBoxAdapter(
+                slivers: [
+                  const SliverToBoxAdapter(
                     child: PostQuestion(),
                   ),
-                  // TODO: Add PagedSliverList
                   SliverToBoxAdapter(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         vertical: 12,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          PostAnswersDeclaration(),
-                          PostAnswer(),
-                        ],
+                      child: AnswersSection(
+                        postId: widget.postId,
                       ),
                     ),
-                    // child: Padding(
-                    //   padding: EdgeInsets.symmetric(
-                    //     vertical: 24,
-                    //   ),
-                    //   child: AnswersEmpty(),
-                    // ),
                   ),
                 ],
               ),
@@ -80,3 +68,11 @@ class _PostState extends State<Post> {
     );
   }
 }
+
+
+// child: Padding(
+//   padding: EdgeInsets.symmetric(
+//     vertical: 24,
+//   ),
+//   child: AnswersEmpty(),
+// ),

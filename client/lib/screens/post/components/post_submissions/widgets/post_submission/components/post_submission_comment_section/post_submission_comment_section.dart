@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'components/post_comment_count.dart';
 
-
-
 class PostSubmissionCommentSection extends StatelessWidget {
   const PostSubmissionCommentSection({
     super.key,
@@ -18,11 +16,11 @@ class PostSubmissionCommentSection extends StatelessWidget {
     return Row(
       children: [
         extra ?? const SizedBox.shrink(),
-        const Expanded(
+        Expanded(
           child: Align(
             alignment: Alignment.centerRight,
             child: PostCommentCount(
-              count: 3,
+              count: count,
             ),
           ),
         ),

@@ -3,22 +3,33 @@ import 'package:flutter/material.dart';
 import 'components/post_view_content.dart';
 import 'components/post_view_title.dart';
 
+class PostSubmissionTitleConfig {
+  final bool useTitle;
+  final String? value;
+
+  PostSubmissionTitleConfig({
+    required this.useTitle,
+    this.value,
+  });
+}
+
 class PostSubmissionContent extends StatelessWidget {
   const PostSubmissionContent({
     super.key,
-    this.title,
+    required this.title,
+    this.isLoading = false,
     required this.description,
   });
-  final String? title;
-  final String description;
+  final PostSubmissionTitleConfig title;
+  final String? description;
+  final bool isLoading;
 
-  bool get _isTitleNull => title == null;
-
-  Widget _renderTitle() => !_isTitleNull
+  Widget _renderTitle() => title.useTitle
       ? Padding(
-          padding: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.only(bottom: 4),
           child: PostViewTitle(
-            title: title!,
+            title: title.value,
+            isLoading: isLoading,
           ),
         )
       : const SizedBox.shrink();
@@ -30,8 +41,9 @@ class PostSubmissionContent extends StatelessWidget {
       children: [
         _renderTitle(),
         PostViewContent(
-          text: description,
-        ),
+          content: description,
+          isLoading: isLoading,
+        )
       ],
     );
   }

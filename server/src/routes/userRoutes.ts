@@ -1,11 +1,12 @@
-import { Response } from "express";
+import UserController from "../controllers/UserController";
+import isLoggedIn from "../middlewares/isLoggedIn";
 
 const express = require("express");
 const router = express.Router();
 
-router.get('/', (req: Request, res: Response) => {
-  res.status(200).send("Users")
-})
+const userController = new UserController();
 
+router.get("/id", userController.getUserProfile);
+router.patch("/me", isLoggedIn, userController.updateUserProfile);
 
 export default router;

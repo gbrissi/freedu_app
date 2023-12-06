@@ -6,18 +6,44 @@ import 'components/post_submission_comment_section/post_submission_comment_secti
 import 'components/post_submission_content/post_submission_content.dart';
 import 'components/post_submission_header/post_submission_header.dart';
 
+class PostSubmissionMetadata {
+  final int commentsCount;
+  final bool isAnswer;
+  final int? targetId;
+
+  PostSubmissionMetadata({
+    required this.commentsCount,
+    required this.isAnswer,
+    required this.targetId,
+  });
+}
+
 class PostSubmission extends StatelessWidget {
   const PostSubmission({
     super.key,
     required this.header,
     required this.content,
-    required this.comments,
+    required this.meta,
     this.extra,
   });
   final PostSubmissionHeader header;
   final PostSubmissionContent content;
-  final List<String> comments;
+  final PostSubmissionMetadata meta;
   final Widget? extra;
+
+  Widget _renderComments() {
+    print("Meta: ${meta.targetId}");
+    if (meta.targetId != null) {
+      print("estou renderizando., ${meta.isAnswer}");
+      return PostComments(
+        target: meta.targetId!,
+        isAnswer: meta.isAnswer,
+      );
+    }
+
+    print("retornando vazio.");
+    return const SizedBox.shrink();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +63,7 @@ class PostSubmission extends StatelessWidget {
                   children: [
                     content,
                     PostSubmissionCommentSection(
-                      count: comments.length,
+                      count: meta.commentsCount,
                       extra: extra,
                     )
                   ],
@@ -46,9 +72,7 @@ class PostSubmission extends StatelessWidget {
             ),
           ),
         ),
-        PostComments(
-          posts: comments,
-        ),
+        _renderComments(),
       ],
     );
   }

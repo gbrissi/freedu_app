@@ -1,17 +1,34 @@
+import 'dart:convert';
+
 import 'package:client/screens/post/widgets/vote_interactive/vote_interactive.dart';
 import 'package:client/shared/components/row_separated.dart';
+import 'package:client/shared/http/models/comment_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'components/post_comment_author.dart';
 import 'components/post_comment_created_at.dart';
 import 'components/post_comment_message.dart';
-import 'models/comment.dart';
 
-class PostComment extends StatelessWidget {
+enum CommentType {
+  answer,
+  post,
+}
+
+class PostComment extends StatefulWidget {
   const PostComment({
     super.key,
     required this.comment,
+    required this.type,
   });
-  final Comment comment;
+  final CommentModel comment;
+  final CommentType type;
+
+  @override
+  State<PostComment> createState() => _PostCommentState();
+}
+
+class _PostCommentState extends State<PostComment> {
+  final QuillController _quillController = QuillController.basic();
 
   List<InlineSpan> _getSeparatedChildren({
     required double spacing,
@@ -36,6 +53,15 @@ class PostComment extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    _quillController.document = Document.fromJson(
+      jsonDecode(widget.comment.content),
+    );
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       shape: const RoundedRectangleBorder(
@@ -48,8 +74,14 @@ class PostComment extends StatelessWidget {
           spacing: 8,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            VoteInteractive(
-              vote: comment.votes,
+            VoteInteractive.fromVoteModel(
+              votes: widget.comment.votes ?? [],
+              target: VoteTargetConfig(
+                type: widget.type == CommentType.answer
+                    ? VoteTarget.answerComment
+                    : VoteTarget.postComment,
+                id: widget.comment.id,
+              ),
             ),
             Expanded(
               child: Text.rich(
@@ -61,15 +93,16 @@ class PostComment extends StatelessWidget {
                       //   count: comment.votes,
                       // ),
                       postCommentMessage(
-                        message: comment.message,
+                        controller: _quillController,
+                        message: widget.comment.content,
                       ),
                       postCommentAuthor(
                         context: context,
-                        author: comment.author,
+                        author: widget.comment.author.name,
                       ),
                       postCommentCreatedAt(
                         context: context,
-                        createdAt: comment.createdAt,
+                        createdAt: widget.comment.createdAt,
                       ),
                     ],
                   ),

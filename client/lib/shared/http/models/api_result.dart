@@ -17,6 +17,10 @@ class ApiResult<T> {
   final HttpStatus result;
   final bool isError;
 
+  T get() {
+    return (this.result as HttpSuccess<T>).data;
+  }
+
   ApiResult.fromResponse(
     Response response,
     T Function(dynamic data) constructor,

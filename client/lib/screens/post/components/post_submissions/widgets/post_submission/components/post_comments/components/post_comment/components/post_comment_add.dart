@@ -1,16 +1,56 @@
 import 'package:client/shared/components/quill_text_field/quill_text_field.dart';
+import 'package:client/shared/extensions/quill_controller_get.dart';
+import 'package:client/shared/http/repositories/answer_repository.dart';
+import 'package:client/shared/http/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../../../../../../../../utils/show_snackbar.dart';
+import '../../../../../../../../../provider/post_view_controller.dart';
 
 class PostCommentAdd extends StatefulWidget {
-  const PostCommentAdd({super.key});
+  const PostCommentAdd({
+    super.key,
+    required this.targetId,
+    required this.isAnswer,
+  });
+  final int targetId;
+  final bool isAnswer;
 
   @override
   State<PostCommentAdd> createState() => _PostCommentAddState();
 }
 
 class _PostCommentAddState extends State<PostCommentAdd> {
-  final QuillController _controller = QuillController.basic();
+  final QuillController _textController = QuillController.basic();
+
+  bool _isEnabled = true;
+  set isEnabled(bool value) => setState(() => _isEnabled = value);
+  bool get isEnabled => _isEnabled;
+
+  Future<void> sendPostComment() async {
+    isEnabled = false;
+
+    final result = !widget.isAnswer
+        ? await PostRepository.sendComment(
+            answer: _textController.get(),
+            postId: widget.targetId,
+          )
+        : await AnswerRepository.sendComment(
+            answer: _textController.get(),
+            answerId: widget.targetId,
+          );
+
+    if (mounted) {
+      showSnackbar(
+        context,
+        SnackBarResult.fromApiResult(result),
+      );
+    }
+
+    isEnabled = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +60,16 @@ class _PostCommentAddState extends State<PostCommentAdd> {
       ),
       child: QuillTextField(
         fontSize: 14,
-        controller: _controller,
+        controller: _textController,
         keepExpanded: false,
         maxLines: 3,
         label: "Comentário",
         placeholder: "Adicionar comentário",
+        customButton: TextFieldButton(
+          text: "Enviar",
+          icon: Icons.send,
+          onTap: isEnabled ? sendPostComment : null,
+        ),
       ),
     );
   }

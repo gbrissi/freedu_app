@@ -1,3 +1,5 @@
+import { DateRange } from "./DateRange";
+
 export interface PageOptions {
   limit: number;
   page: number;

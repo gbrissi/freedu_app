@@ -14,13 +14,14 @@ class PostCardAuthorAvatar extends StatefulWidget {
 
 class _PostCardAuthorAvatarState extends State<PostCardAuthorAvatar> {
   late final controller = context.read<PostCardProvider>();
-  // TODO: 
+  // TODO:
   // String get avatarUrl => controller.post.author.picture;
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Add user avatar.
     return Avatar(
-      url: getRandomImageUrl(),
+      url: null,
     );
   }
 }

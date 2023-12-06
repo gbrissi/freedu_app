@@ -7,7 +7,6 @@ class TagRepository {
     return HttpClient.instance
         .get(path: "tags/")
         .then((response) {
-      print("Resposta: ${response.body}");
       return ApiResult<List<TagModel>>.fromResponse(
         response,
         (data) => data.map<TagModel>((e) {
