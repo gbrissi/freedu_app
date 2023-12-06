@@ -17,7 +17,7 @@ class _GoogleLoginState extends State<GoogleLogin> {
   InAppWebViewController? webViewController;
 
   void onPageChange(_, value, __) {
-    print('valor: $value');
+    // print('valor: $value');
   }
 
   @override

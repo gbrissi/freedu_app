@@ -7,7 +7,11 @@ import {
   _transformPostView,
   postViewModelQuery,
 } from "../interfaces/PostViewModel";
-import { CommentModel, _transformCommentModel, commentModelQuery } from "../interfaces/CommentModel";
+import {
+  CommentModel,
+  _transformCommentModel,
+  commentModelQuery,
+} from "../interfaces/CommentModel";
 import {
   AnswerModel,
   answerModelPrismaQuery,
@@ -247,7 +251,10 @@ export default class PostRepository {
             votes: {
               upsert: {
                 where: {
-                  authorId: authorId,
+                  authorId_postCommentId: {
+                    authorId,
+                    postCommentId: commentId,
+                  },
                 },
                 update: {
                   value: value,
@@ -282,7 +289,10 @@ export default class PostRepository {
             votes: {
               upsert: {
                 where: {
-                  authorId: authorId,
+                  authorId_postId: {
+                    authorId,
+                    postId: postId,
+                  },
                 },
                 update: {
                   value: value,

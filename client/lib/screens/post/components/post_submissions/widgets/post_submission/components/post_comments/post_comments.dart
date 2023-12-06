@@ -3,7 +3,6 @@ import 'package:client/shared/components/column_separated.dart';
 import 'package:client/shared/http/models/comment_model.dart';
 import 'package:client/shared/http/models/page_options.dart';
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../../../../shared/http/models/api_result.dart';
 import '../../../../../../../../shared/http/repositories/answer_repository.dart';
 import '../../../../../../../../shared/http/repositories/post_repository.dart';
@@ -29,6 +28,12 @@ class _PostCommentsState extends State<PostComments> {
   int pageKey = 0;
   bool showLoadMoreButton = true;
   List<CommentModel> comments = [];
+
+  void _setCommentToList(CommentModel item) {
+    setState(() {
+      comments = [...comments, item];
+    });
+  }
 
   void _addListToComments(List<CommentModel> items) {
     comments = [...comments, ...items];
@@ -120,6 +125,7 @@ class _PostCommentsState extends State<PostComments> {
             children: [
               _commentLoadMoreButton,
               PostCommentAdd(
+                onCreated: _setCommentToList,
                 targetId: widget.target,
                 isAnswer: widget.isAnswer,
               ),

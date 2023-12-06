@@ -27,7 +27,5 @@ class VoteModel {
 }
 
 AuthorModel _getAuthor(Map<String, dynamic> json) {
-  print("JSON: $json");
-
   return AuthorModel.fromJson(json['author']);
 }

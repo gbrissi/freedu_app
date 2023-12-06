@@ -26,7 +26,9 @@ class Home extends StatelessWidget {
             children: const [
               HomeHeader(),
               PostSearch(),
-              PostCardList(),
+              Expanded(
+                child: PostCardList(),
+              ),
             ],
           ),
         ),

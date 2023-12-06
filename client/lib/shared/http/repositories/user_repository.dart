@@ -23,7 +23,6 @@ class UserRepository {
         "picture": picture != null ? jsonEncode(picture.toJson()) : null,
       },
     ).then((response) {
-      print("Atualizei o perfil: ${response.body}");
       return ApiResult<UserProfileModel>.fromResponse(
         response,
         (data) => UserProfileModel.fromJson(data),
@@ -41,7 +40,6 @@ class UserRepository {
         "userId": userId.toString(),
       },
     ).then((response) {
-      print("Peguei o corpo: ${response.body}");
       return ApiResult<UserProfileModel>.fromResponse(
         response,
         (data) => UserProfileModel.fromJson(data),

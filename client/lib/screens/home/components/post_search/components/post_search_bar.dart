@@ -17,6 +17,7 @@ class _PostSearchBarState extends State<PostSearchBar> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _searchController,
+      autofocus: false,
       decoration: const InputDecoration(
         hintText: "Procurar publicação.",
         isDense: true,

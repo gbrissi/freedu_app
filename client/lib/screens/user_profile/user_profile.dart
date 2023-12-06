@@ -41,8 +41,6 @@ class _UserProfileState extends State<UserProfile> {
     descriptionController.text =
         user?.description ?? descriptionController.text;
 
-    print("Data: ${user?.name}");
-
     setState(() {
       picture = user?.picture != null
           ? PickerImage.fromPictureModel(user!.picture!)
@@ -68,8 +66,6 @@ class _UserProfileState extends State<UserProfile> {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
-      print("Dados: ${result.files.single.bytes}, ${result.files.single}");
-
       setState(() {
         picture = PickerImage.fromPlatformFile(
           result.files.single,

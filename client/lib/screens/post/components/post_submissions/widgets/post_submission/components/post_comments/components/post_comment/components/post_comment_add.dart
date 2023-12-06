@@ -1,22 +1,23 @@
 import 'package:client/shared/components/quill_text_field/quill_text_field.dart';
 import 'package:client/shared/extensions/quill_controller_get.dart';
+import 'package:client/shared/http/models/comment_model.dart';
 import 'package:client/shared/http/repositories/answer_repository.dart';
 import 'package:client/shared/http/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../../../../../../../../utils/show_snackbar.dart';
-import '../../../../../../../../../provider/post_view_controller.dart';
 
 class PostCommentAdd extends StatefulWidget {
   const PostCommentAdd({
     super.key,
     required this.targetId,
     required this.isAnswer,
+    required this.onCreated,
   });
   final int targetId;
   final bool isAnswer;
+  final void Function(CommentModel comment) onCreated;
 
   @override
   State<PostCommentAdd> createState() => _PostCommentAddState();
@@ -47,6 +48,14 @@ class _PostCommentAddState extends State<PostCommentAdd> {
         context,
         SnackBarResult.fromApiResult(result),
       );
+
+      if (!result.isError) {
+        widget.onCreated(
+          result.get(),
+        );
+
+        _textController.clear();
+      }
     }
 
     isEnabled = true;

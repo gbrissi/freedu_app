@@ -32,16 +32,13 @@ class PostSubmission extends StatelessWidget {
   final Widget? extra;
 
   Widget _renderComments() {
-    print("Meta: ${meta.targetId}");
     if (meta.targetId != null) {
-      print("estou renderizando., ${meta.isAnswer}");
       return PostComments(
         target: meta.targetId!,
         isAnswer: meta.isAnswer,
       );
     }
 
-    print("retornando vazio.");
     return const SizedBox.shrink();
   }
 

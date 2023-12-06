@@ -5,6 +5,7 @@ import 'package:client/shared/http/models/page_options.dart';
 import 'package:client/shared/http/models/post_card_model.dart';
 import 'package:client/shared/http/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,18 @@ class _PostCardListState extends State<PostCardList> {
 
   final PagingController<int, PostCardModel> _pagingController =
       PagingController(firstPageKey: 0);
+
+  Future<void> _listenToRouteUpdates() async {
+    final router = GoRouter.of(context);
+    final lastMatch = router.routerDelegate.currentConfiguration.last;
+    final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
+        ? lastMatch.matches
+        : router.routerDelegate.currentConfiguration;
+
+    final String location = matchList.uri.toString();
+
+    if (location == "/") _pagingController.refresh();
+  }
 
   @override
   void initState() {
@@ -48,6 +61,8 @@ class _PostCardListState extends State<PostCardList> {
     });
 
     controller.addListener(_pagingController.refresh);
+
+    GoRouter.of(context).routerDelegate.addListener(_listenToRouteUpdates);
 
     super.initState();
   }

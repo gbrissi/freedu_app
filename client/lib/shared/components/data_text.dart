@@ -47,8 +47,6 @@ class _DataTextState extends State<DataText> {
   String get value => widget.text ?? widget.placeholder ?? "Conteúdo vazio";
 
   Widget _renderText() {
-    print("Valor: $value");
-
     final Text mainText = Text(
       value,
       style: widget.style,

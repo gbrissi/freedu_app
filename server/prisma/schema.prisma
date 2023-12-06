@@ -43,6 +43,19 @@ model PostComment {
   updatedAt DateTime          @updatedAt
 }
 
+model AnswerComment {
+  id        Int                 @id @default(autoincrement())
+  content   String              @db.Text
+  author    User                @relation(fields: [authorId], references: [id])
+  authorId  Int
+  votes     AnswerCommentVote[]
+  reports   Report[]
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+  answer    Answer              @relation(fields: [answerId], references: [id])
+  answerId  Int
+}
+
 model Tag {
   id        Int      @id @default(autoincrement())
   name      String   @unique @db.VarChar(255)
@@ -55,44 +68,52 @@ model PostCommentVote {
   id            Int          @id @default(autoincrement())
   value         Int
   author        User         @relation(fields: [authorId], references: [id])
-  authorId      Int          @unique
+  authorId      Int
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   postComment   PostComment? @relation(fields: [postCommentId], references: [id])
-  postCommentId Int
+  postCommentId Int?
+
+  @@unique([authorId, postCommentId])
 }
 
 model PostVote {
   id        Int      @id @default(autoincrement())
   value     Int
   author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int      @unique
+  authorId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   post      Post?    @relation(fields: [postId], references: [id])
   postId    Int?
+
+  @@unique([authorId, postId])
 }
 
 model AnswerCommentVote {
   id              Int            @id @default(autoincrement())
   value           Int
   author          User           @relation(fields: [authorId], references: [id])
-  authorId        Int            @unique
+  authorId        Int
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   answerComment   AnswerComment? @relation(fields: [answerCommentId], references: [id])
   answerCommentId Int?
+
+  @@unique([authorId, answerCommentId])
 }
 
 model AnswerVote {
   id        Int      @id @default(autoincrement())
   value     Int
   author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int      @unique
+  authorId  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   answer    Answer?  @relation(fields: [answerId], references: [id])
   answerId  Int?
+
+  @@unique([authorId, answerId])
 }
 
 model Answer {
@@ -107,19 +128,6 @@ model Answer {
   post      Post            @relation(fields: [postId], references: [id])
   postId    Int             @unique
   comments  AnswerComment[]
-}
-
-model AnswerComment {
-  id        Int                 @id @default(autoincrement())
-  content   String              @db.Text
-  author    User                @relation(fields: [authorId], references: [id])
-  authorId  Int                 @unique
-  votes     AnswerCommentVote[]
-  reports   Report[]
-  createdAt DateTime            @default(now())
-  updatedAt DateTime            @updatedAt
-  answer    Answer              @relation(fields: [answerId], references: [id])
-  answerId  Int                 @unique
 }
 
 // TODO: Change this shit.

@@ -10,13 +10,17 @@ class PostViewController extends ChangeNotifier {
 
   PostViewModel? get post => _post;
 
+  void update(PostViewModel post) {
+    _post = post;
+    notifyListeners();
+  }
+
   PostViewController(int postId) {
     PostRepository.getPost(postId).then((value) {
-      if(!value.isError) {
+      if (!value.isError) {
         _post = value.get();
         notifyListeners();
       }
     });
   }
-
 }

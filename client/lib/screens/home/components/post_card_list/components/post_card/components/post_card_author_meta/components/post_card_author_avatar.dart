@@ -1,5 +1,4 @@
 import 'package:client/screens/home/components/post_card_list/components/post_card/provider/post_card_provider.dart';
-import 'package:client/utils/get_random_image_url.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +19,7 @@ class _PostCardAuthorAvatarState extends State<PostCardAuthorAvatar> {
   @override
   Widget build(BuildContext context) {
     // TODO: Add user avatar.
-    return Avatar(
+    return const Avatar(
       url: null,
     );
   }

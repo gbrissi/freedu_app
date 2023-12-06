@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:client/screens/home/components/post_search/models/date_range.dart';
 import 'package:flutter/material.dart';
 
 class PostsFilterProvider extends ChangeNotifier {
   final TextEditingController searchController = TextEditingController();
+  String? _tempQuery;
   String? _query;
   String get query => _query ?? "";
 
@@ -34,8 +37,15 @@ class PostsFilterProvider extends ChangeNotifier {
 
   PostsFilterProvider() {
     searchController.addListener(() {
-      _query = searchController.text;
-      notifyListeners();
+      _tempQuery = searchController.text;
+      final String? reqSearch = _tempQuery;
+
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (reqSearch == _tempQuery) {
+          _query = searchController.text;
+          notifyListeners();
+        }
+      });
     });
   }
 }

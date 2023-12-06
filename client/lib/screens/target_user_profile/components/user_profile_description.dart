@@ -4,18 +4,20 @@ import 'package:provider/provider.dart';
 
 import '../widgets/user_profile_text_info.dart';
 
-class UserProfileEmail extends StatelessWidget {
-  const UserProfileEmail({super.key});
+class UserProfileDescription extends StatelessWidget {
+  const UserProfileDescription({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Selector<TargetUserProfileProvider, String?>(
-      selector: (_, provider) => provider.email,
-      builder: (_, email, __) {
+      selector: (_, provider) => provider.description,
+      builder: (_, description, __) {
         return UserProfileTextInfo(
-          label: "E-mail",
-          text: email ?? "user123@gmail.com",
-          icon: Icons.email,
+          label: "Descrição",
+          text: description?.isNotEmpty ?? false
+              ? description!
+              : "Nenhuma descrição a ser visualizada",
+          icon: Icons.description,
         );
       },
     );

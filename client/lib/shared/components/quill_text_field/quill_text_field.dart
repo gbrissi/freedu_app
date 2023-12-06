@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:go_router/go_router.dart';
 
 import 'components/quill_text_field_label.dart';
 
@@ -123,181 +126,196 @@ class _QuillTextFieldState extends State<QuillTextField> {
       ? highlightColor
       : Theme.of(context).textTheme.bodyMedium!.color?.withOpacity(0.7);
 
+  Future<bool> _closeTextField() async {
+    if (Platform.isAndroid || Platform.isIOS) {
+      if (focusNode.hasFocus && !widget.keepExpanded) {
+        focusNode.unfocus();
+        return false;
+      }
+    }
+    
+    context.pop();
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return TextFieldTapRegion(
-      child: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              QuillTextFieldLabel(
-                label: widget.label,
-                color: textColor,
-                isSelected: isContentFieldSelected,
-              ),
-              MouseRegion(
-                onEnter: (_) => setHoverState(true),
-                onExit: (_) => setHoverState(false),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 2,
-                        color: detailsColor,
+    return WillPopScope(
+      onWillPop: _closeTextField,
+      child: TextFieldTapRegion(
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                QuillTextFieldLabel(
+                  label: widget.label,
+                  color: textColor,
+                  isSelected: isContentFieldSelected,
+                ),
+                MouseRegion(
+                  onEnter: (_) => setHoverState(true),
+                  onExit: (_) => setHoverState(false),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 2,
+                          color: detailsColor,
+                        ),
                       ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        height: isExpanded
-                            ? fontSize * widget.maxLines + fontSize
-                            : fontSize * 2,
-                        padding: const EdgeInsets.only(
-                          bottom: 12,
-                        ),
-                        child: QuillEditor(
-                          focusNode: focusNode, // focusNode,
-                          scrollController: _scrollController,
-                          scrollable: true,
-                          padding: EdgeInsets.zero,
-                          autoFocus: false,
-                          expands: false,
-                          enableSelectionToolbar: false,
-                          placeholder: widget.placeholder,
-                          controller: widget.controller,
-                          readOnly: false,
-                          customStyles: DefaultStyles(
-                            placeHolder: DefaultTextBlockStyle(
-                              TextStyle(
-                                fontSize: fontSize,
-                                fontWeight: FontWeight.w400,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .color!
-                                    .withOpacity(0.55),
+                    child: Column(
+                      children: [
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          height: isExpanded
+                              ? fontSize * widget.maxLines + fontSize
+                              : fontSize * 2,
+                          padding: const EdgeInsets.only(
+                            bottom: 12,
+                          ),
+                          child: QuillEditor(
+                            focusNode: focusNode, // focusNode,
+                            scrollController: _scrollController,
+                            scrollable: true,
+                            padding: EdgeInsets.zero,
+                            autoFocus: false,
+                            expands: false,
+                            enableSelectionToolbar: false,
+                            placeholder: widget.placeholder,
+                            controller: widget.controller,
+                            readOnly: false,
+                            customStyles: DefaultStyles(
+                              placeHolder: DefaultTextBlockStyle(
+                                TextStyle(
+                                  fontSize: fontSize,
+                                  fontWeight: FontWeight.w400,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .color!
+                                      .withOpacity(0.55),
+                                ),
+                                const VerticalSpacing(0, 0),
+                                const VerticalSpacing(0, 0),
+                                const BoxDecoration(),
                               ),
-                              const VerticalSpacing(0, 0),
-                              const VerticalSpacing(0, 0),
-                              const BoxDecoration(),
                             ),
                           ),
                         ),
-                      ),
-                      AnimatedOpacity(
-                        duration: const Duration(milliseconds: 200),
-                        opacity: isExpanded ? 1.0 : 0.0,
-                        child: Visibility(
-                          visible: isExpanded,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                QuillToolbar.basic(
-                                  locale: const Locale('pt', 'BR'),
-                                  toolbarIconSize: 18,
-                                  toolbarSectionSpacing: 4,
-                                  toolbarIconCrossAlignment:
-                                      WrapCrossAlignment.start,
-                                  toolbarIconAlignment: WrapAlignment.start,
-                                  showAlignmentButtons: false,
-                                  showBackgroundColorButton: false,
-                                  showBoldButton: true,
-                                  showCenterAlignment: false,
-                                  showClearFormat: false,
-                                  showCodeBlock: false,
-                                  showColorButton: false,
-                                  showDirection: false,
-                                  showDividers: false,
-                                  showFontFamily: false,
-                                  showFontSize: false,
-                                  showIndent: false,
-                                  showHeaderStyle: false,
-                                  showItalicButton: true,
-                                  showInlineCode: false,
-                                  showJustifyAlignment: false,
-                                  showLeftAlignment: false,
-                                  showLink: true,
-                                  showListBullets: true,
-                                  showListCheck: false,
-                                  showListNumbers: true,
-                                  showQuote: true,
-                                  showRedo: false,
-                                  showRightAlignment: false,
-                                  showSearchButton: false,
-                                  showSmallButton: false,
-                                  showStrikeThrough: false,
-                                  showSubscript: false,
-                                  showSuperscript: false,
-                                  showUnderLineButton: false,
-                                  showUndo: false,
-                                  controller: widget.controller,
-                                  multiRowsDisplay: true,
-                                  color: Colors.red,
-                                  iconTheme: const QuillIconTheme(
-                                    borderRadius: 12,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Flexible(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8),
-                                          child: customButton,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: AnimatedSwitcher(
-                duration: const Duration(
-                  milliseconds: 200,
-                ),
-                child: _visibility && !isExpanded
-                    ? ClipOval(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: widget.customButton?.onTap,
+                        AnimatedOpacity(
+                          duration: const Duration(milliseconds: 200),
+                          opacity: isExpanded ? 1.0 : 0.0,
+                          child: Visibility(
+                            visible: isExpanded,
                             child: Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                widget.customButton?.icon,
-                                color: Theme.of(context)
-                                    .buttonTheme
-                                    .colorScheme
-                                    ?.primary,
-                                size: 24,
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  QuillToolbar.basic(
+                                    locale: const Locale('pt', 'BR'),
+                                    toolbarIconSize: 18,
+                                    toolbarSectionSpacing: 4,
+                                    toolbarIconCrossAlignment:
+                                        WrapCrossAlignment.start,
+                                    toolbarIconAlignment: WrapAlignment.start,
+                                    showAlignmentButtons: false,
+                                    showBackgroundColorButton: false,
+                                    showBoldButton: true,
+                                    showCenterAlignment: false,
+                                    showClearFormat: false,
+                                    showCodeBlock: false,
+                                    showColorButton: false,
+                                    showDirection: false,
+                                    showDividers: false,
+                                    showFontFamily: false,
+                                    showFontSize: false,
+                                    showIndent: false,
+                                    showHeaderStyle: false,
+                                    showItalicButton: true,
+                                    showInlineCode: false,
+                                    showJustifyAlignment: false,
+                                    showLeftAlignment: false,
+                                    showLink: true,
+                                    showListBullets: true,
+                                    showListCheck: false,
+                                    showListNumbers: true,
+                                    showQuote: true,
+                                    showRedo: false,
+                                    showRightAlignment: false,
+                                    showSearchButton: false,
+                                    showSmallButton: false,
+                                    showStrikeThrough: false,
+                                    showSubscript: false,
+                                    showSuperscript: false,
+                                    showUnderLineButton: false,
+                                    showUndo: false,
+                                    controller: widget.controller,
+                                    multiRowsDisplay: true,
+                                    color: Colors.red,
+                                    iconTheme: const QuillIconTheme(
+                                      borderRadius: 12,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Flexible(
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 8),
+                                            child: customButton,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      )
-                    : const SizedBox.shrink()),
-          ),
-        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: AnimatedSwitcher(
+                  duration: const Duration(
+                    milliseconds: 200,
+                  ),
+                  child: _visibility && !isExpanded
+                      ? ClipOval(
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: widget.customButton?.onTap,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  widget.customButton?.icon,
+                                  color: Theme.of(context)
+                                      .buttonTheme
+                                      .colorScheme
+                                      ?.primary,
+                                  size: 24,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink()),
+            ),
+          ],
+        ),
       ),
     );
   }

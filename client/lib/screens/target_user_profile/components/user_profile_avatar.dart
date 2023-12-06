@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../shared/components/avatar.dart';
-import '../../../utils/get_random_image_url.dart';
 
 class UserProfileAvatar extends StatelessWidget {
   const UserProfileAvatar({super.key});
@@ -9,7 +8,7 @@ class UserProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: Add target picture.
-    return Avatar(
+    return const Avatar(
       radius: 64,
       url: null
     );

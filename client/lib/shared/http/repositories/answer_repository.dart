@@ -24,7 +24,6 @@ class AnswerRepository {
     ).then(
       (response) {
         return ApiResult<List<CommentModel>>.fromResponse(response, (data) {
-          print("dados: $data");
           return (data as List<dynamic>)
               .map<CommentModel>((e) => CommentModel.fromJson(e))
               .toList();
@@ -45,7 +44,6 @@ class AnswerRepository {
         "answerId": answerId,
       },
     ).then((response) {
-      print("Resposta: ${response.body}");
       return ApiResult<CommentModel>.fromResponse(
         response,
         (data) => CommentModel.fromJson(data),
@@ -65,7 +63,6 @@ class AnswerRepository {
         "vote": vote,
       },
     ).then((response) {
-      print("Resposta: ${response.body}");
       return ApiResult<AnswerModel>.fromResponse(
         response,
         (data) => AnswerModel.fromJson(data),

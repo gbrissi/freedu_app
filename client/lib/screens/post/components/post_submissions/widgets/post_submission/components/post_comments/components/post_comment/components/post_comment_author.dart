@@ -1,20 +1,17 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-void _showAuthorProfile() {
-
-}
-
 TextSpan postCommentAuthor({
   required BuildContext context,
   required String author,
+  required void Function() onTap,
 }) =>
     TextSpan(
       children: [
         const TextSpan(text: "- "),
         TextSpan(
           text: author,
-          recognizer: TapGestureRecognizer()..onTap = _showAuthorProfile,
+          recognizer: TapGestureRecognizer()..onTap = onTap,
           style: const TextStyle(
             decoration: TextDecoration.underline,
           ),

@@ -26,43 +26,48 @@ class _PostState extends State<Post> {
     return ChangeNotifierProvider(
       create: (_) => PostViewController(widget.postId),
       child: Scaffold(
-        appBar: const CustomAppBar(
-          showBackButton: true,
-        ),
-        body: Scrollbar(
-          controller: controller,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(
-                scrollbars: false,
-              ),
-              child: CustomScrollView(
-                controller: controller,
-                slivers: [
-                  const SliverToBoxAdapter(
-                    child: PostQuestion(),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                      ),
-                      child: AnswersSection(
-                        postId: widget.postId,
+        // TODO: Double scaffold so that keyboard can push the items to above, haven't found a better way
+        // to get around this yet.
+        body: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: const CustomAppBar(
+            showBackButton: true,
+          ),
+          body: Scrollbar(
+            controller: controller,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  scrollbars: false,
+                ),
+                child: CustomScrollView(
+                  controller: controller,
+                  slivers: [
+                    const SliverToBoxAdapter(
+                      child: PostQuestion(),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                        ),
+                        child: AnswersSection(
+                          postId: widget.postId,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: const Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PostAnswerBlock(),
-          ],
+          bottomNavigationBar: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              PostAnswerBlock(),
+            ],
+          ),
         ),
       ),
     );

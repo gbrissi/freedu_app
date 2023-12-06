@@ -29,7 +29,10 @@ export default class AnswerRepository {
             votes: {
               upsert: {
                 where: {
-                  authorId: authorId,
+                  authorId_answerId: {
+                    authorId,
+                    answerId: answerId,
+                  },
                 },
                 update: {
                   value: value,
@@ -68,7 +71,10 @@ export default class AnswerRepository {
             votes: {
               upsert: {
                 where: {
-                  authorId: authorId,
+                  authorId_answerCommentId: {
+                    authorId,
+                    answerCommentId: commentId,
+                  },
                 },
                 update: {
                   value: value,

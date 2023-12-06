@@ -113,7 +113,6 @@ class PostRepository {
         "vote": vote,
       },
     ).then((response) {
-      print("Resposta: ${response.body}");
       return ApiResult<PostViewModel>.fromResponse(
         response,
         (data) => PostViewModel.fromJson(data),
@@ -133,7 +132,6 @@ class PostRepository {
         "vote": vote,
       },
     ).then((response) {
-      print("Resposta: ${response.body}");
       return ApiResult<CommentModel>.fromResponse(
         response,
         (data) => CommentModel.fromJson(data),
@@ -155,7 +153,6 @@ class PostRepository {
         ),
       },
     ).then((response) {
-      print("resposta: ${response.body}");
       return ApiResult<List<CommentModel>>.fromResponse(
         response,
         (data) => (data as List<dynamic>)

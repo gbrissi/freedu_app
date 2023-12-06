@@ -5,6 +5,7 @@ import 'package:client/shared/components/row_separated.dart';
 import 'package:client/shared/http/models/comment_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:go_router/go_router.dart';
 import 'components/post_comment_author.dart';
 import 'components/post_comment_created_at.dart';
 import 'components/post_comment_message.dart';
@@ -29,6 +30,13 @@ class PostComment extends StatefulWidget {
 
 class _PostCommentState extends State<PostComment> {
   final QuillController _quillController = QuillController.basic();
+  late CommentModel comment = widget.comment;
+
+  void _updateComment(CommentModel value) {
+    setState(() {
+      comment = value;
+    });
+  }
 
   List<InlineSpan> _getSeparatedChildren({
     required double spacing,
@@ -55,10 +63,17 @@ class _PostCommentState extends State<PostComment> {
   @override
   void initState() {
     _quillController.document = Document.fromJson(
-      jsonDecode(widget.comment.content),
+      jsonDecode(comment.content),
     );
 
     super.initState();
+  }
+
+    void viewUserProfile() {
+      context.pushNamed(
+        "userProfile",
+        extra: comment.author.id,
+      );
   }
 
   @override
@@ -74,13 +89,14 @@ class _PostCommentState extends State<PostComment> {
           spacing: 8,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            VoteInteractive.fromVoteModel(
-              votes: widget.comment.votes ?? [],
+            VoteInteractive<CommentModel>.fromVoteModel(
+              onChanged: _updateComment,
+              votes: comment.votes ?? [],
               target: VoteTargetConfig(
                 type: widget.type == CommentType.answer
                     ? VoteTarget.answerComment
                     : VoteTarget.postComment,
-                id: widget.comment.id,
+                id: comment.id,
               ),
             ),
             Expanded(
@@ -94,15 +110,16 @@ class _PostCommentState extends State<PostComment> {
                       // ),
                       postCommentMessage(
                         controller: _quillController,
-                        message: widget.comment.content,
+                        message: comment.content,
                       ),
                       postCommentAuthor(
                         context: context,
-                        author: widget.comment.author.name,
+                        author: comment.author.name,
+                        onTap: viewUserProfile,
                       ),
                       postCommentCreatedAt(
                         context: context,
-                        createdAt: widget.comment.createdAt,
+                        createdAt: comment.createdAt,
                       ),
                     ],
                   ),

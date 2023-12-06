@@ -9,8 +9,15 @@ import '../widgets/post_submission/components/post_submission_header/post_submis
 import '../widgets/post_submission/post_submission.dart';
 import 'components/post_add_comment.dart';
 
-class PostQuestion extends StatelessWidget {
+class PostQuestion extends StatefulWidget {
   const PostQuestion({super.key});
+
+  @override
+  State<PostQuestion> createState() => _PostQuestionState();
+}
+
+class _PostQuestionState extends State<PostQuestion> {
+  late final _postController = context.read<PostViewController>();
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +26,13 @@ class PostQuestion extends StatelessWidget {
       builder: (_, post, __) {
         return PostSubmission(
           header: PostSubmissionHeader(
-            voteInteractive: VoteInteractive.fromVoteModel(
+            voteInteractive: VoteInteractive<PostViewModel>.fromVoteModel(
               target: VoteTargetConfig(type: VoteTarget.post, id: post?.id),
               votes: post?.votes ?? [],
+              onChanged: _postController.update,
             ),
             author: post?.author.name ?? "usuário",
+            authorId: post?.author.id,
             createdAt: post?.createdAt ?? DateTime.now(),
             postTags: post?.tags.map((e) => e.name).toList(),
             authorImageUrl: post?.author.picture,

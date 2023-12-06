@@ -3,6 +3,7 @@ import 'package:client/screens/create_post/providers/post_create_provider.dart';
 import 'package:client/shared/components/column_separated.dart';
 import 'package:client/shared/http/repositories/post_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../shared/http/models/api_result.dart';
@@ -29,6 +30,15 @@ class _CreatePostState extends State<CreatePost> {
           context,
           SnackBarResult.fromApiResult(post),
         );
+
+        if (!post.isError) {
+          final int postId = post.get().id;
+          context.pop();
+          context.pushNamed(
+            "post",
+            extra: postId,
+          );
+        }
       }
     });
   }

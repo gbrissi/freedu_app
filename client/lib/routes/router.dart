@@ -132,7 +132,12 @@ final GoRouter router = GoRouter(
             GoRoute(
               name: "userProfile",
               path: 'user/profile',
-              builder: (context, state) => const TargetUserProfile(),
+              builder: (context, state) {
+                final int targetId = state.extra as int;
+                return TargetUserProfile(
+                  target: targetId,
+                );
+              },
             ),
             GoRoute(
               name: "activity",
