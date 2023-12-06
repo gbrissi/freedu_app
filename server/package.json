@@ -37,6 +37,7 @@
     "passport-local": "^1.0.0"
   },
   "scripts": {
+    "start": "ts-node src/server.ts",
     "dev": "nodemon src/server.ts"
   }
 }
