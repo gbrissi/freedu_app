@@ -74,8 +74,11 @@ class _AnswersSectionState extends State<AnswersSection> {
           shrinkWrap: true,
           builderDelegate: PagedChildBuilderDelegate<AnswerModel>(
             noItemsFoundIndicatorBuilder: (context) => const AnswersEmpty(),
-            itemBuilder: (_, item, __) => PostAnswer(
-              answer: item,
+            itemBuilder: (_, item, __) => Padding(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: PostAnswer(
+                answer: item,
+              ),
             ),
           ),
         ),

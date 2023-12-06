@@ -37,7 +37,7 @@ class PostCardModel {
         tags = json['tags'].map<TagModel>((e) => TagModel.fromJson(e)).toList(),
         content = json['content'],
         votes = json['votes'],
-        answers = json['votes'],
+        answers = json['answers'],
         published = json['published'],
         createdAt = DateTime.parse(json['createdAt']),
         updatedAt = DateTime.parse(json['updatedAt']);

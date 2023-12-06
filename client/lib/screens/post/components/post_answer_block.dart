@@ -45,6 +45,8 @@ class _PostAnswerBlockState extends State<PostAnswerBlock> {
 
       if (!result.isError) {
         answerController.addAnswer(result.get());
+        _controller.clear();
+        postController.answerFocusNode.unfocus();
       }
     }
 
