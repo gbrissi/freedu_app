@@ -18,9 +18,8 @@ Para começar a utilizar o Freedu, siga as etapas abaixo:
    - Abra o aplicativo Freedu após a instalação.
    - Faça login com sua conta existente ou crie uma nova.
 
-4. **Explore e Aprenda**:
-   - Explore a variedade de cursos e recursos disponíveis no FreedU.
-   - Personalize sua experiência de aprendizado de acordo com seus interesses.
+4. **Colabore e Aprenda**:
+   - Colabore com a plataforma através da interação com outros usuários.
 
 ## Requisitos do Sistema
 
