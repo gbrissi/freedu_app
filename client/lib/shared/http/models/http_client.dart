@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:client/services/shared_prefs_service.dart';
 import 'package:client/shared/http/models/http_status/implementations/http_success.dart';

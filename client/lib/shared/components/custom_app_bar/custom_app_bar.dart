@@ -1,4 +1,3 @@
-import 'package:client/screens/user_profile/controller/user_profile_controller.dart';
 import 'package:client/shared/components/custom_app_bar/components/leading_builder.dart';
 import 'package:client/shared/providers/auth_provider.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
         "Ěèéêëěð",
-        "freedu"
+        "freedu",
+        "inappwebview",
+        "onrender"
     ],
     "cmake.configureOnOpen": false
 }

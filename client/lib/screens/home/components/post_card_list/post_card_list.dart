@@ -108,7 +108,6 @@ class _PostCardListState extends State<PostCardList> {
 //   votes: 2,
 //   title: "Lorem Ipsum",
 //   description:
-//       "Pariatur qui laboris eu veniam ullamco quis voluptate laborum do labore minim sunt.",
 // );
 
 // late final List<HomePostModel> dummyModels = [
