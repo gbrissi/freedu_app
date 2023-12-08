@@ -69,15 +69,18 @@ class _AnswersSectionState extends State<AnswersSection> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const PostAnswersDeclaration(),
-        PagedListView(
-          pagingController: _pagingController,
-          shrinkWrap: true,
-          builderDelegate: PagedChildBuilderDelegate<AnswerModel>(
-            noItemsFoundIndicatorBuilder: (context) => const AnswersEmpty(),
-            itemBuilder: (_, item, __) => Padding(
-              padding: const EdgeInsets.only(bottom: 24),
-              child: PostAnswer(
-                answer: item,
+        ScrollConfiguration(
+          behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+          child: PagedListView(
+            pagingController: _pagingController,
+            shrinkWrap: true,
+            builderDelegate: PagedChildBuilderDelegate<AnswerModel>(
+              noItemsFoundIndicatorBuilder: (context) => const AnswersEmpty(),
+              itemBuilder: (_, item, __) => Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: PostAnswer(
+                  answer: item,
+                ),
               ),
             ),
           ),
